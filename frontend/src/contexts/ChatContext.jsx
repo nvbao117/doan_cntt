@@ -118,9 +118,13 @@ export const ChatProvider = ({ children }) => {
 
         try {
             // Call API
-            const response = await chatAPI.sendMessage(content, chatId);
-            const botMessage = response.data; // Expecting { id, role: 'bot', content, timestamp }
-
+            const response = await chatAPI.sendLangChainMessage(content, String(chatId));
+            const botMessage = {
+                id: Date.now() + 1,
+                role: 'bot',
+                content: response.data.reply, // Lấy text từ field 'reply'
+                timestamp: new Date().toISOString(),
+            };
             setChats((prev) =>
                 prev.map((chat) =>
                     chat.id === chatId

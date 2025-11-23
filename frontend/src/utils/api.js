@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
@@ -49,6 +49,7 @@ export const chatAPI = {
     sendMessage: (message, chatId) => api.post('/chat/message', { message, chatId }),
     getChatHistory: () => api.get('/chat/history'),
     deleteChat: (chatId) => api.delete(`/chat/${chatId}`),
+    sendLangChainMessage: (message, threadId) => api.post('/chat', { message, thread_id: threadId }),
 };
 
 export const quizAPI = {

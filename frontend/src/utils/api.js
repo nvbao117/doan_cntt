@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base configuration
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ api.interceptors.response.use(
 // API endpoints (ready for backend integration)
 export const authAPI = {
     login: (email, password) => api.post('/auth/login', { email, password }),
-    register: (name, email, password) => api.post('/auth/register', { name, email, password }),
+    register: (name, email, password) => api.post('/auth/register', { full_name: name, email, password }),
     logout: () => api.post('/auth/logout'),
     resetPassword: (email) => api.post('/auth/reset-password', { email }),
 };
@@ -49,7 +49,7 @@ export const chatAPI = {
     sendMessage: (message, chatId) => api.post('/chat/message', { message, chatId }),
     getChatHistory: () => api.get('/chat/history'),
     deleteChat: (chatId) => api.delete(`/chat/${chatId}`),
-    sendLangChainMessage: (message, threadId) => api.post('/chat', { message, thread_id: threadId }),
+    sendLangChainMessage: (message, threadId) => api.post('/chat/chat', { message, thread_id: threadId }),
 };
 
 export const quizAPI = {

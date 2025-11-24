@@ -33,43 +33,23 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            // Try actual API login
             const response = await authAPI.login(email, password);
-            const { user, token } = response.data;
+            const { user, access_token } = response.data;
 
-            // Save session
-            localStorage.setItem('authToken', token);
+            localStorage.setItem('authToken', access_token);
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('isAuthenticated', 'true');
 
             setUser(user);
             setIsAuthenticated(true);
-            setNeedsPersonalization(false); // Assume existing users don't need it or check backend
+            setNeedsPersonalization(false);
 
             return { success: true, user };
         } catch (error) {
             console.error('Login failed:', error);
-
-            // Fallback for demo/development if API fails (optional, remove for production)
-            if (process.env.NODE_ENV === 'development') {
-                console.warn('Falling back to mock login');
-                const mockUser = {
-                    id: 1,
-                    name: 'Demo User',
-                    email: email,
-                    avatar: null,
-                };
-                setUser(mockUser);
-                setIsAuthenticated(true);
-                setNeedsPersonalization(true);
-                localStorage.setItem('user', JSON.stringify(mockUser));
-                localStorage.setItem('isAuthenticated', 'true');
-                return { success: true, user: mockUser };
-            }
-
             return {
                 success: false,
-                error: error.response?.data?.message || 'Login failed. Please check your credentials.'
+                error: error.response?.data?.detail || 'Login failed. Please check your credentials.'
             };
         }
     };
@@ -104,9 +84,9 @@ export const AuthProvider = ({ children }) => {
     const register = async (name, email, password) => {
         try {
             const response = await authAPI.register(name, email, password);
-            const { user, token } = response.data;
+            const { user, access_token } = response.data;
 
-            localStorage.setItem('authToken', token);
+            localStorage.setItem('authToken', access_token);
             localStorage.setItem('user', JSON.stringify(user));
             localStorage.setItem('isAuthenticated', 'true');
 
@@ -118,25 +98,9 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Registration failed:', error);
 
-            // Fallback for demo
-            if (process.env.NODE_ENV === 'development') {
-                const mockUser = {
-                    id: Date.now(),
-                    name: name,
-                    email: email,
-                    avatar: null,
-                };
-                setUser(mockUser);
-                setIsAuthenticated(true);
-                setNeedsPersonalization(true);
-                localStorage.setItem('user', JSON.stringify(mockUser));
-                localStorage.setItem('isAuthenticated', 'true');
-                return { success: true, user: mockUser };
-            }
-
             return {
                 success: false,
-                error: error.response?.data?.message || 'Registration failed. Please try again.'
+                error: error.response?.data?.detail || 'Registration failed. Please try again.'
             };
         }
     };

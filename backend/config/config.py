@@ -9,10 +9,16 @@ class Settings(BaseSettings):
         env_file="backend/.env",
         extra="ignore"
     )
+  
+    PROJECT_NAME: str = "DO AN"
+    VERSION: str = "1.0.0"
+    API_V1_STR: str = "/api/v1"
+    
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     
     BACKEND_CORS_ORIGINS: List[str] = Field(default_factory=list)
+    ALGORITHM: str = "HS256"
 
     DB_HOST: str = "localhost"
     DB_PORT: int = 5432
@@ -20,6 +26,10 @@ class Settings(BaseSettings):
     DB_USER:str="postgres"
     DB_PASSWORD:str=""
     DATABASE_URL:str|None=None
+    
+    
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    SECRET_KEY: str = "change-me"
     
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
     @classmethod

@@ -1,4 +1,4 @@
-from src.service.graph import app_graph
+from backend.src.service.graph import app_graph
 from langchain_core.messages import HumanMessage
 
 async def process_chat(user_input:str, thread_id:str="1"):

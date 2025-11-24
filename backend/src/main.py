@@ -1,21 +1,30 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.api.endpoints import chat
+from backend.src.api.v1 import router  as v1_router
+from backend.config import settings
 
-
-app = FastAPI()
-
-origins = [
-    "http://localhost:5173",  # Frontend React
-    "http://localhost:3000",  # Dự phòng
-]
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    description="Chatbot Study API",
+)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins= ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(chat.router, prefix="/api")
+prefix = settings.API_V1_STR
+app.include_router(v1_router.router, prefix=prefix)
+
+@app.get("/")
+def root():
+    return {"message": "Chatbot Study API", "version": settings.VERSION}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+

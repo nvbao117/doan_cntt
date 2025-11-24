@@ -2,8 +2,8 @@ from typing import TypedDict,Annotated, Sequence
 from langchain_core.messages import BaseMessage, HumanMessage
 from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
-from src.core.llm import llm 
-from src.service.tools import tools
+from backend.src.core.llm import llm 
+from backend.src.service.tools import tools
 
 class AgentState(TypedDict):
     messages: Sequence[BaseMessage] 

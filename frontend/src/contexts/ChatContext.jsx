@@ -78,7 +78,6 @@ export const ChatProvider = ({ children }) => {
             await chatAPI.deleteChat(chatId);
         } catch (error) {
             console.error('Failed to delete chat:', error);
-            // Ideally revert state here if critical
         }
     };
 
@@ -118,13 +117,14 @@ export const ChatProvider = ({ children }) => {
 
         try {
             // Call API
-            const response = await chatAPI.sendLangChainMessage(content, String(chatId));
+            const response = await chatAPI.sendLangChainMessage(content, chatId);
             const botMessage = {
-                id: Date.now() + 1,
-                role: 'bot',
-                content: response.data.reply, // Lấy text từ field 'reply'
-                timestamp: new Date().toISOString(),
-            };
+                    id: Date.now() + 1,
+                    role: 'bot',
+                    content: response.data.reply, // Lấy text từ field 'reply'
+                    timestamp: new Date().toISOString(),
+                };
+
             setChats((prev) =>
                 prev.map((chat) =>
                     chat.id === chatId

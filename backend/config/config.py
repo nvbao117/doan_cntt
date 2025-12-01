@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     DB_PORT: int = 5432
     DB_NAME:str="doan_db"
     DB_USER:str="postgres"
-    DB_PASSWORD:str=""
+    DB_PASSWORD:str="Duy1509?"
     DATABASE_URL:str|None=None
     
     
@@ -43,10 +43,10 @@ class Settings(BaseSettings):
     @computed_field
     @property
     def sqlalchemy_database_uri(self)-> str: 
+        print(self.DATABASE_URL)
         if self.DATABASE_URL:
             return self.DATABASE_URL
         password=f":{quote_plus(self.DB_PASSWORD)}" if self.DB_PASSWORD else ""
-        
         return(
             f"postgresql+psycopg2://{self.DB_USER}{password}@"
             f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
